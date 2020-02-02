@@ -89,6 +89,58 @@
 					<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 						<h1 class="h2">Clientes</h1>
 					</div>
+
+					<?php 
+	                    if(isset($_SESSION['cliente_nao_cadastrado'])){
+	                        echo "
+	                            <div class='alert alert-danger' role='alert'>
+	                                Ocorreu um erro e não foi possivel cadastrar o cliente!
+	                            </div>
+	                        ";
+	                    }
+	                    unset($_SESSION['cliente_nao_editado']);
+	                    if(isset($_SESSION['cliente_nao_cadastrado'])){
+	                        echo "
+	                            <div class='alert alert-danger' role='alert'>
+	                                Ocorreu um erro e não foi possivel editar o cliente!
+	                            </div>
+	                        ";
+	                    }
+	                    unset($_SESSION['cliente_nao_editado']);
+	                    if(isset($_SESSION['cliente_nao_apagado'])){
+	                        echo "
+	                            <div class='alert alert-danger' role='alert'>
+	                                Ocorreu um erro e não foi possivel apagar o cliente!
+	                            </div>
+	                        ";
+	                    }
+	                    unset($_SESSION['cliente_nao_apagado']);
+	                    if(isset($_SESSION['cliente_cadastrado'])){
+	                        echo "
+	                            <div class='alert alert-success' role='alert'>
+	                                Cliente Cadastrado Sucesso!
+	                            </div>
+	                        ";
+	                    }
+	                    unset($_SESSION['cliente_cadastrado']);
+	                    if(isset($_SESSION['cliente_editado'])){
+	                        echo "
+	                            <div class='alert alert-success' role='alert'>
+	                                Cliente Editado Com Sucesso!
+	                            </div>
+	                        ";
+	                    }
+	                    unset($_SESSION['cliente_editado']);
+	                    if(isset($_SESSION['cliente_apagado'])){
+	                        echo "
+	                            <div class='alert alert-success' role='alert'>
+	                                Cliente Excluido Sucesso!
+	                            </div>
+	                        ";
+	                    }
+	                    unset($_SESSION['cliente_apagado']);
+	                ?>
+
 					<div class="d-flex flex-column bd-highlight mb-3">
 						<div class="d-flex justify-content-end">
 							<a href="gerencia_cliente.php" class="btn">Cadastrar +</a>
@@ -117,7 +169,7 @@
 										echo "<td>".$d['endereco']." ".$d['numero']."</td>";
 										echo "<td>".$d['cpf']."</td>";
 										echo "<td>";
-										echo "<button class='btn btn-primary'>Editar</button> ";
+										echo "<a href='gerencia_cliente.php?id=".$d['id']."'class='btn btn-primary'>Editar</a> ";
 										echo "<button class='btn btn-danger btn-delete'>Apagar</button>";
 										echo "</td>";
 										echo "</tr>";

@@ -31,46 +31,6 @@
 			}
 		</style>
 
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
- 
-
-		<script> 
-			function formata_mascara(campo_passado, mascara) {
-			    var campo = campo_passado.value.length;
-			    var saida = mascara.substring(0,1);
-			    var texto = mascara.substring(campo);
-			    if(texto.substring(0,1) != saida){
-			        campo_passado.value += texto.substring(0,1);
-			    }
-			}
-
-			function frm_number_only_exc(){
-		        /**
-		          * Função pada deixar digitar apenas numero
-		          */
-		          if ( event.keyCode == 37 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40 || event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || ( event.keyCode < 106 && event.keyCode > 95 ) ) { 
-		            return true;
-		        }else{
-		            return false;
-		        }
-		    }
-
-		    $(document).ready(function(){
-
-		        $("input.frm_number_only").keydown(function(event) { 
-
-		           if ( frm_number_only_exc() ) { 
-
-		           } else { 
-		               if ( event.keyCode < 48 || event.keyCode > 57 ) { 
-		                   event.preventDefault();  
-		               }        
-		           } 
-		       }); 
-
-		    });
-		</script>
-
 	</head>
   	<body>
 		<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
@@ -104,38 +64,6 @@
 				</nav>
 
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-					<?php 
-						if(isset($_POST['delete_id'])){
-							$id = $_POST['delete_id'];
-							$cliente->delete($id);
-						}
-
-			  			if(isset($_POST['btn-cadastrar'])){
-			  				$nome = $_POST['nome'];
-			  				$email = $_POST['email'];
-			  				$cpf = $_POST['cpf'];
-			  				$cep = $_POST['cep'];
-			  				$endereco = $_POST['rua'];
-			  				$num = $_POST['num_casa'];
-			  				$bairro = $_POST['bairro'];
-			  				$cidade = $_POST['cidade'];
-			  				$uf = $_POST['uf'];
-
-			  				/*
-			  				echo $nome."<br>";
-			  				echo $email."<br>";
-			  				echo $cpf."<br>";
-			  				echo $cep."<br>";
-			  				echo $endereco."<br>";
-			  				echo $num."<br>";
-			  				echo $bairro."<br>";
-			  				echo $cidade."<br>";
-							echo $uf."<br>";
-							*/
-
-							$cliente->create($nome, $email, $cpf, $endereco, $num, $bairro, $cidade, $cep, $uf);
-			  			}
-			  		?>
 					<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 						<h1>Cadastro Cliente</h1>
 						<div class="d-flex justify-content-end">
@@ -145,6 +73,7 @@
 
 					<div>
 						<form method="POST" action="">
+							<input type="hidden" id="campo_id" name="id">
 							<div class="form-group">
 								<label for="campo_nome">Nome: </label>
 								<input type="text" class="form-control" id="campo_nome" name="nome" required>
@@ -193,19 +122,85 @@
 								</div>
 							</div>
 
-							<button class="btn btn-success" type="submit" id="btn-cadastrar" name="btn-cadastrar">Cadastrar</button>
-							<button class="btn btn-info" type="reset">Limpar</button>
+							<?php 
+								if(isset($_GET['id'])){
+							?>
+								<button class="btn btn-info" type="submit" id="btn-editar" name="btn-editar">Editar</button>
+							<?php
+								}else{
+							?>
+								<button class="btn btn-success" type="submit" id="btn-cadastrar" name="btn-cadastrar">Cadastrar</button>
+							<?php
+							 	} 
+							 ?>
+							<button class="btn btn-secondary" type="reset">Limpar</button>
 						</form>
 					</div>
 				</main>
+				<?php 
+					if(isset($_GET['id'])){
+						$id = $_GET['id'];
+						$dados = $cliente->read($id);
+						
+						foreach ($dados as $d) {
+							echo "<script>";
+							echo "document.getElementById('campo_id').value = '".$d['id']."';";
+							echo "document.getElementById('campo_nome').value = '".$d['nome']."';";
+							echo "document.getElementById('campo_cpf').value = '".$d['cpf']."';";
+							echo "document.getElementById('campo_email').value = '".$d['email']."';";
+							echo "document.getElementById('rua').value = '".$d['endereco']."';";
+							echo "document.getElementById('num').value = '".$d['numero']."';";
+							echo "document.getElementById('bairro').value = '".$d['bairro']."';";
+							echo "document.getElementById('cep').value = '".$d['cep']."';";
+							echo "document.getElementById('cidade').value = '".$d['cidade']."';";
+							echo "document.getElementById('uf').value = '".$d['uf']."';";
+							echo "</script>";
+						}
+					}
+
+					if(isset($_POST['delete_id'])){
+						$id = $_POST['delete_id'];
+						$cliente->delete($id);
+					}
+
+					if(isset($_POST['btn-cadastrar'])){
+						$nome = $_POST['nome'];
+						$email = $_POST['email'];
+						$cpf = $_POST['cpf'];
+						$cep = $_POST['cep'];
+						$endereco = $_POST['rua'];
+						$num = $_POST['num_casa'];
+						$bairro = $_POST['bairro'];
+						$cidade = $_POST['cidade'];
+						$uf = $_POST['uf'];
+
+						$cliente->create($nome, $email, $cpf, $endereco, $num, $bairro, $cidade, $cep, $uf);
+					}
+
+					if(isset($_POST['btn-editar'])){
+						$id = $_POST['id'];
+						$nome = $_POST['nome'];
+						$email = $_POST['email'];
+						$cpf = $_POST['cpf'];
+						$cep = $_POST['cep'];
+						$endereco = $_POST['rua'];
+						$num = $_POST['num_casa'];
+						$bairro = $_POST['bairro'];
+						$cidade = $_POST['cidade'];
+						$uf = $_POST['uf'];
+
+						$cliente->edit($id, $nome, $email, $cpf, $endereco, $num, $bairro, $cidade, $cep, $uf);
+					}
+				?>
 			</div>
 		</div>	  	
+
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	  	<script>window.jQuery || document.write('<script src="../lib/js/jquery-slim.min.js"><\/script>')</script>
 	  	<script src="../lib/js/bootstrap.bundle.min.js"></script>
-		
+		<script src="../lib/js/cliente.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-
 		<script src="../lib/js/dashboard.js"></script>
 		<script src="../lib/js/geraCep.js"></script>
 	</body>
