@@ -1,3 +1,8 @@
+<?php 
+	include_once '../Control/Cliente_Control.php';
+	$cliente = new Cliente_Control();
+	$dados = $cliente->VerClientes();
+?>
 <!doctype html>
 <html lang="pt-br">
 	<head>
@@ -80,17 +85,21 @@
 								</tr>	
 							</thead>
 							<tbody>
-								<tr>
-									<td>1</td>
-									<td>Leonardo</td>
-									<td>leo@teste.com.br</td>
-									<td>R teste 123</td>
-									<td>111.222.333-78</td>
-									<td>
-										<button class="btn btn-primary">Editar</button>
-										<button class="btn btn-danger">Apagar</button>
-									</td>
-								</tr>
+								<?php 
+									foreach ($dados as $d) {
+										echo "<tr>";
+										echo "<td>".$d['id']."</td>";
+										echo "<td>".$d['nome']."</td>";
+										echo "<td>".$d['email']."</td>";
+										echo "<td>".$d['endereco']." ".$d['numero']."</td>";
+										echo "<td>".$d['cpf']."</td>";
+										echo "<td>";
+										echo "<button class='btn btn-primary'>Editar</button> ";
+										echo "<button class='btn btn-danger'>Apagar</button>";
+										echo "</td>";
+										echo "</tr>";
+									}
+								?>
 							</tbody>
 						</table>
 					</div>

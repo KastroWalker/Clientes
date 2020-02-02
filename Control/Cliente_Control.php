@@ -11,6 +11,14 @@
 			$this->connection = new Conexao();
 		}
 
+		function VerClientes(){
+			$sql = "SELECT * FROM cliente";
+			$d = $this->connection->connect();
+			$dados = $d->prepare($sql);
+			$dados->execute();
+			return $dados;
+		}
+
 		function create($nome, $email, $cpf, $endereco, $numero_endereco, $bairro, $cidade, $cep, $estado){
 			$this->data->setNome($nome);
 			$this->data->setEmail($email);
@@ -22,20 +30,20 @@
 			$this->data->setCep($cep);
 			$this->data->setEstado($estado);
 
-			$sql = "INSERT INTO cliente ('nome', 'endereco', 'numero', 'bairro', 'cidade', 'uf', 'cep', 'email', 'cpf') VALUES (:nome, :endero, :numero, :bairro, :cidade, :uf, :cep, :email, :cpf);";
+			$sql = "INSERT INTO cliente (nome, endereco, numero, bairro, cidade, uf, cep, email, cpf) VALUES (:nome, :endereco, :numero, :bairro, :cidade, :uf, :cep, :email, :cpf);";
 
 			$d = $this->connection->connect();
 
 			$data = $d->prepare($sql);
-			$data->bindValue(":nome", $this->getNome());
-			$data->bindValue(":endereco", $this->getEndereco());
-			$data->bindValue(":numero", $this->getNumero());
-			$data->bindValue(":bairro", $this->getBairro());
-			$data->bindValue(":cidade", $this->getCidade());
-			$data->bindValue(":uf", $this->getUf());
-			$data->bindValue(":cep", $this->getCep());
-			$data->bindValue(":email", $this->getEmail());
-			$data->bindValue(":cpf", $this->getCpf());
+			$data->bindValue(":nome", $this->data->getNome());
+			$data->bindValue(":endereco", $this->data->getEndereco());
+			$data->bindValue(":numero", $this->data->getNumeroEndereco());
+			$data->bindValue(":bairro", $this->data->getBairro());
+			$data->bindValue(":cidade", $this->data->getCidade());
+			$data->bindValue(":uf", $this->data->getEstado());
+			$data->bindValue(":cep", $this->data->getCep());
+			$data->bindValue(":email", $this->data->getEmail());
+			$data->bindValue(":cpf", $this->data->getCpf());
 
 			try {
 				$data->execute();
@@ -51,7 +59,7 @@
 
 	        $d = $this->connection->connect();
 	        $data = $d->prepare($sql);
-	        $data->bindValue(":id", $this->data->getId());
+	        $data->bindValue(":id", $this->data->data->getId());
 	        try {
 		        $data->execute();
 		        return $data;
@@ -77,15 +85,15 @@
 			$d = $this->connection->connect();
 
 			$data = $d->prepare($sql);
-			$data->bindValue(":nome", $this->getNome());
-			$data->bindValue(":endereco", $this->getEndereco());
-			$data->bindValue(":numero", $this->getNumero());
-			$data->bindValue(":bairro", $this->getBairro());
-			$data->bindValue(":cidade", $this->getCidade());
-			$data->bindValue(":uf", $this->getUf());
-			$data->bindValue(":cep", $this->getCep());
-			$data->bindValue(":email", $this->getEmail());
-			$data->bindValue(":cpf", $this->getCpf());
+			$data->bindValue(":nome", $this->data->getNome());
+			$data->bindValue(":endereco", $this->data->getEnderecoEndereco());
+			$data->bindValue(":numero", $this->data->getNumero());
+			$data->bindValue(":bairro", $this->data->getBairro());
+			$data->bindValue(":cidade", $this->data->getCidade());
+			$data->bindValue(":uf", $this->data->getEstado());
+			$data->bindValue(":cep", $this->data->getCep());
+			$data->bindValue(":email", $this->data->getEmail());
+			$data->bindValue(":cpf", $this->data->getCpf());
 
 			try {
 				$data->execute();
@@ -101,7 +109,7 @@
 	        $d = $this->connection->connect();
 
 	        $data = $d->prepare($sql);
-	        $data->bindValue(":id", $this->data->getId());
+	        $data->bindValue(":id", $this->data->data->getId());
 
 	        try {
 	            $data->execute();

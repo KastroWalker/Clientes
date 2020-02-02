@@ -62,7 +62,7 @@
 		function getNumeroEndereco(){
 			return $this->numero_endero;
 		}
-		function setNumeroEndero($numero_endero){
+		function setNumeroEndereco($numero_endero){
 			$this->numero_endero = $numero_endero;
 		}
 

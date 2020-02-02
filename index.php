@@ -1,3 +1,14 @@
+<?php 
+	include_once 'DB/Conexao.php';
+
+	$connection = new Conexao();
+
+	$sql = "SELECT COUNT(*) FROM cliente";
+	$d = $connection->connect();
+	$dados = $d->prepare($sql);
+	$dados->execute();
+?>
+
 <!doctype html>
 <html lang="pt-br">
 	<head>
@@ -61,7 +72,7 @@
 					<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 						<h1 class="h2">Dashboard</h1>
 					</div>
-					<div><h3>Total de Clientes: <span><?php echo @$clientes ?><span></h3></div>
+					<div><h3>Total de Clientes: <span><?php echo $dados->fetchColumn(); ?><span></h3></div>
 				</main>
 			</div>
 		</div>

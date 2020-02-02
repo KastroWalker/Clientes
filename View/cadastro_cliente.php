@@ -1,3 +1,9 @@
+<?php 
+	include_once '../Control/Cliente_Control.php';
+
+	$cliente = new Cliente_Control();
+?>
+
 <!doctype html>
 <html lang="pt-br">
 	<head>
@@ -24,6 +30,46 @@
 				}
 			}
 		</style>
+
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+ 
+
+		<script> 
+			function formata_mascara(campo_passado, mascara) {
+			    var campo = campo_passado.value.length;
+			    var saida = mascara.substring(0,1);
+			    var texto = mascara.substring(campo);
+			    if(texto.substring(0,1) != saida){
+			        campo_passado.value += texto.substring(0,1);
+			    }
+			}
+
+			function frm_number_only_exc(){
+		        /**
+		          * Função pada deixar digitar apenas numero
+		          */
+		          if ( event.keyCode == 37 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40 || event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || ( event.keyCode < 106 && event.keyCode > 95 ) ) { 
+		            return true;
+		        }else{
+		            return false;
+		        }
+		    }
+
+		    $(document).ready(function(){
+
+		        $("input.frm_number_only").keydown(function(event) { 
+
+		           if ( frm_number_only_exc() ) { 
+
+		           } else { 
+		               if ( event.keyCode < 48 || event.keyCode > 57 ) { 
+		                   event.preventDefault();  
+		               }        
+		           } 
+		       }); 
+
+		    });
+		</script>
 
 	</head>
   	<body>
@@ -58,38 +104,62 @@
 				</nav>
 
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+					<?php 
+			  			if(isset($_POST['btn-cadastrar'])){
+			  				$nome = $_POST['nome'];
+			  				$email = $_POST['email'];
+			  				$cpf = $_POST['cpf'];
+			  				$cep = $_POST['cep'];
+			  				$endereco = $_POST['rua'];
+			  				$num = $_POST['num_casa'];
+			  				$bairro = $_POST['bairro'];
+			  				$cidade = $_POST['cidade'];
+			  				$uf = $_POST['uf'];
+
+			  				/*
+			  				echo $nome."<br>";
+			  				echo $email."<br>";
+			  				echo $cpf."<br>";
+			  				echo $cep."<br>";
+			  				echo $endereco."<br>";
+			  				echo $num."<br>";
+			  				echo $bairro."<br>";
+			  				echo $cidade."<br>";
+							echo $uf."<br>";
+							*/
+
+							$cliente->create($nome, $email, $cpf, $endereco, $num, $bairro, $cidade, $cep, $uf);
+			  			}
+			  		?>
 					<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-						<h1 class="h2">Cadastro Cliente</h1>
+						<h1>Cadastro Cliente</h1>
+						<div class="d-flex justify-content-end">
+							<a href="clientes.php" class="btn btn-primary">Voltar</a>
+						</div>
 					</div>
 
 					<div>
-						<form method="get" action=".">
-							<!--div class="form-group">
-								<label for="">ID: </label>
-								<input type="text" class="form-control" id="" name="">
+						<form method="POST" action="">
+							<div class="form-group">
+								<label for="campo_nome">Nome: </label>
+								<input type="text" class="form-control" id="campo_nome" name="nome" required>
 							</div>
 
 							<div class="form-group">
-								<label for="">Nome: </label>
-								<input type="text" class="form-control" id="" name="">
+								<label for="campo_email">Email: </label>
+								<input type="email" class="form-control" id="campo_email" name="email">
 							</div>
 
 							<div class="form-group">
-								<label for="">Email: </label>
-								<input type="text" class="form-control" id="" name="">
+								<label for="campo_cpf">CPF: </label>
+								<input type="text" class="form-control frm_number_only" id="campo_cpf" name="cpf" onkeypress="formata_mascara(this, '###.###.###-##', event)" minlength="14" maxlength="14" required >
 							</div>
 
-							<div class="form-group">
-								<label for="">CPF: </label>
-								<input type="text" class="form-control" id="" name="">
-							</div-->
-
+							<h5>Endereço</h5>
 							<div class="endereco">
-								<h4>Endereço</h4>
-
 								<div class="form-group">
 									<label>Cep:</label>
-									<input name="cep" type="text" id="cep" value="" size="10" maxlength="9" class="form-control" onblur="pesquisacep(this.value);">
+									<input name="cep" type="text" id="cep" value="" size="10" maxlength="9" class="form-control frm_number_only" onblur="pesquisacep(this.value);">
 								</div>
 								
 								<div class="form-group">
@@ -98,8 +168,8 @@
 								</div>
 								
 								<div class="form-group">
-									<label>Número:</label>
-									<input name="num_casa" type="text" id="num" class="form-control">
+									<label for="num">Número:</label>
+									<input name="num_casa" type="text" id="num" class="form-control frm_number_only">
 								</div>
 
 								<div class="form-group">
@@ -117,21 +187,21 @@
 									<input name="uf" type="text" id="uf" size="2" class="form-control">
 								</div>
 							</div>
+
+							<button class="btn btn-success" type="submit" id="btn-cadastrar" name="btn-cadastrar">Cadastrar</button>
+							<button class="btn btn-info" type="reset">Limpar</button>
 						</form>
 					</div>
 				</main>
 			</div>
-		</div>
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	  	
+		</div>	  	
 	  	<script>window.jQuery || document.write('<script src="../lib/js/jquery-slim.min.js"><\/script>')</script>
 	  	<script src="../lib/js/bootstrap.bundle.min.js"></script>
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-		
-		<script src="../lib/js/dashboard.js"></script>
 
+		<script src="../lib/js/dashboard.js"></script>
 		<script src="../lib/js/geraCep.js"></script>
 	</body>
 </html>
