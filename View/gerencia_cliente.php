@@ -105,6 +105,11 @@
 
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 					<?php 
+						if(isset($_POST['delete_id'])){
+							$id = $_POST['delete_id'];
+							$cliente->delete($id);
+						}
+
 			  			if(isset($_POST['btn-cadastrar'])){
 			  				$nome = $_POST['nome'];
 			  				$email = $_POST['email'];

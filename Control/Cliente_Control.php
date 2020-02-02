@@ -109,10 +109,11 @@
 	        $d = $this->connection->connect();
 
 	        $data = $d->prepare($sql);
-	        $data->bindValue(":id", $this->data->data->getId());
+	        $data->bindValue(":id", $this->data->getId());
 
 	        try {
 	            $data->execute();
+	            header('Location: clientes.php');
 	        } catch (PDOException $ex) {
 	            echo "Erro ao apagar: " . $ex->getMessage();
 	        }
